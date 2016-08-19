@@ -1,0 +1,9 @@
+<resources>
+
+    <style name="text" >
+         <item name="android:text">今个</item>
+        
+        
+     </style>
+               
+</resources>

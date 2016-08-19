@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="alpha">#696969</color>
+    <color name="grag">#DCDCDC</color>
+    <color name="sc_grag">#50ffffff</color>
+    <color name="about_sc_grag">#30696969</color>
+    <color name="dialog_background">#89111111</color>
+    <color name="blue">#0000FF</color>
+    <color name="red">#DC143C</color>
+    <color name="top_blue">#00A9E5</color>
+
+</resources>
