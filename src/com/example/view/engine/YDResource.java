@@ -8,23 +8,23 @@ import java.io.InputStream;
 import java.lang.ref.SoftReference;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+
 import org.xmlpull.v1.XmlPullParser;
-import android.R.integer;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Xml;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView.ScaleType;
+
 import com.example.view.YDImageView;
 import com.example.view.utils.DensityUtil;
 import com.example.view.utils.Logger;
-
 
 public class YDResource {
 	
@@ -43,8 +43,12 @@ public class YDResource {
 	private  SoftReference<HashMap<String,View>> wkIdMap;
 	//View键值对
 	private SoftReference<HashMap<View,SoftReference<HashMap<String,View>>>> wkViewIDMap;
+	
+	private SoftReference<HashMap<String,String>> wkDrawableHMap,wkDrawableMMap,wkDrawableLMap;
+	private SoftReference<HashMap<String,String>> wkDrawableXHMap,wkDrawableXXHMap,wkDrawableMap,wkDrawableXXXHMap;
+	private HashMap<String, Integer> idMap;
 	private String rootpath="";
-	private String vga="drawable-hdpi";
+	public String vga="drawable-hdpi";
 	public static boolean assetsFlag=true;
 	private Context mContext;
 	private YDResource(){}
@@ -68,6 +72,29 @@ public class YDResource {
 			assetsFlag=false;
 		}
 		this.mContext=mContext;
+	}
+	
+	public int getIDWithString(String key){
+		if(idMap==null){
+			idMap=new HashMap<String, Integer>();
+		}
+		Integer id=idMap.get(key);
+		if(idMap.get(key)==null){
+			return -1;
+		}
+		return id.intValue();
+	}
+	
+	public boolean setIDWithString(String key,int id){
+		if(idMap==null){
+			idMap=new HashMap<String, Integer>();
+		}
+		if(idMap.get(key)==null){
+		   idMap.put(key,Integer.valueOf(id));
+		   return true;
+		}else{
+		   return false;
+		}
 	}
 	
 	public void setViewIDMap(View v,SoftReference<HashMap<String,View>> Map){
@@ -102,7 +129,7 @@ public class YDResource {
 		wkIdMap=new SoftReference<HashMap<String,View>>(map);
 	}
 
-	public View getViewByID(String s){
+	public View getViewByID(String s,SoftReference<HashMap<String,View>> wkIdMap){
 		HashMap<String, View> map;
 		if(wkIdMap==null||wkIdMap.get()==null){
 			return null;
@@ -129,8 +156,6 @@ public class YDResource {
 			map.put("layout_gravity", ParamValue.layout_gravity);
 			map.put("layout_alignParentRight", ParamValue.layout_alignParentRight);
 			map.put("layout_weight", ParamValue.layout_weight);
-			map.put("padding",ParamValue.padding);
-			map.put("background",ParamValue.background);
 			wkMap=new SoftReference<HashMap<String,ParamValue>>(map);
 		}
 		return wkMap.get();
@@ -150,12 +175,12 @@ public class YDResource {
 			map.put("textColor",ParamValue.textColor);
 			map.put("textSize", ParamValue.textSize);
 			map.put("visibility", ParamValue.visibility);
-			map.put("background", ParamValue.background);
 			map.put("textStyle", ParamValue.textStyle);
 			map.put("style", ParamValue.style);
 			map.put("src", ParamValue.src);			
 			map.put("gravity", ParamValue.gravity);
 			map.put("padding",ParamValue.padding);
+			map.put("background",ParamValue.background);
 			wkViewMap=new SoftReference<HashMap<String,ParamValue>>(map);
 		}
 		return wkViewMap.get();
@@ -168,7 +193,7 @@ public class YDResource {
 	public int getDimen(String str){
 		if(str.startsWith("@dimen/")){
 			if(wkDimenMap==null || wkDimenMap.get()==null){
-				wkDimenMap=new SoftReference<HashMap<String,String>>(readColorsXml());
+				wkDimenMap=new SoftReference<HashMap<String,String>>(readDimensXml());
 			}
 			str=str.substring(7);
 			str=wkDimenMap.get().get(str);
@@ -265,7 +290,47 @@ public class YDResource {
 		}
 	}
 	
+	/**
+	 * 设置输入类型
+	 * @param 输入类型
+	 * @return
+	 */
+	public  int getInputType(String inputType){
+		Log.i("YDResource InputType", inputType);
+		String [] s=inputType.toUpperCase().split("\\|");
+		int sum=InputType.TYPE_CLASS_TEXT;
+		try {
+			Class clazz = Class.forName("android.text.InputType");
+			for (int i = 0; i < s.length; i++) {
+				Field f=clazz.getField(s[i]);
+				sum|=f.getInt(null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return sum;
+	}
 	
+	public ScaleType getScaleType(String scaleType){
+		if(scaleType.equals("center")){
+			return ScaleType.CENTER;
+		}else if(scaleType.equals("centerCrop")){
+			return ScaleType.CENTER_CROP;
+		}else if(scaleType.equals("centerInside")){
+			return ScaleType.CENTER_INSIDE;
+		}else if(scaleType.equals("fitCenter")){
+			return ScaleType.FIT_CENTER;
+		}else if(scaleType.equals("firEnd")){
+			return ScaleType.FIT_END;
+		}else if(scaleType.equals("firStart")){
+			return ScaleType.FIT_START;
+		}else if(scaleType.equals("firXY")){
+			return ScaleType.FIT_XY;
+		}else if(scaleType.equals("matrix")){
+			return ScaleType.MATRIX;
+		}
+		return null;
+	}
 	
 	/**
 	 * 设置重心
@@ -333,13 +398,168 @@ public class YDResource {
 	private HashMap<String,String> readStringsXml(String path){
 		try {
 			FileInputStream is=new FileInputStream(path);
-			return readStringsXml();
+			return readXml(is,"string");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
+	
+	public void initValues(Context context){
+		if(wkstrings==null || wkstrings.get()==null){
+			wkstrings=new SoftReference<HashMap<String,String>>(readStringsXml());
+		}
+		if(wkColorMap==null || wkColorMap.get()==null){
+			wkColorMap=new SoftReference<HashMap<String,String>>(readColorsXml());
+		}
+		if(wkDimenMap==null || wkDimenMap.get()==null){
+			wkDimenMap=new SoftReference<HashMap<String,String>>(readDimensXml());
+		}
+		getDrawableMap(context);
+	}
 	/**
+	 * 根据输入流获取到键值对
+	 * @param is 获取到的输入流
+	 * @param tag 标签
+	 * @return 
+	 */
+   private HashMap<String,String> readXml(InputStream is,String tag){
+	   XmlPullParser parser=Xml.newPullParser();
+		try {
+			parser.setInput(is, "utf-8");
+			HashMap<String,String> map=new HashMap<String, String>();
+			for(int event=parser.getEventType();event!=XmlPullParser.END_DOCUMENT;event=parser.next()){
+				if(event==XmlPullParser.START_TAG){
+						if(tag.equals(parser.getName())){
+							String name=parser.getAttributeValue(0);
+							String value=parser.nextText();
+							map.put(name, value);
+						}
+				}
+			}
+			return map;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+   }
+   
+   private void getDrawableMap(Context context){
+	   try{
+		   String []fileNames=context.getAssets().list("res");
+		   for(int i=0;i<fileNames.length;i++){
+	        	if(fileNames[i].startsWith("drawable")){
+	        		getDrawablMapByVGA(context,fileNames[i]);
+	        	}
+	       }
+	   }catch(Exception e){
+		   e.printStackTrace();
+	   }
+   }
+   
+  private SoftReference<HashMap<String,String>> getDrawablMapByVGA(Context context,String vga){
+	  if(vga.equalsIgnoreCase("drawable-hdpi")){
+		  if(wkDrawableHMap==null || wkDrawableHMap.get()==null){
+			  wkDrawableHMap=new SoftReference<HashMap<String,String>>(readDrawableList(context,vga));
+			  return wkDrawableHMap;
+		  }else{
+			  return wkDrawableHMap;
+		  }
+	  }else if(vga.equalsIgnoreCase("drawable-mdpi")){
+		  if(wkDrawableMMap==null || wkDrawableMMap.get()==null){
+			  wkDrawableMMap=new SoftReference<HashMap<String,String>>(readDrawableList(context,vga));
+			  return wkDrawableMMap;
+		  }else{
+			  return wkDrawableMMap;
+		  }
+	  }else if(vga.equalsIgnoreCase("drawable-ldpi")){
+		  if(wkDrawableLMap==null || wkDrawableLMap.get()==null){
+			  wkDrawableMMap=new SoftReference<HashMap<String,String>>(readDrawableList(context,vga));
+			  return wkDrawableLMap;
+		  }else{
+			  return wkDrawableLMap;
+		  }
+	  }else if(vga.equalsIgnoreCase("drawable-xhdpi")){
+		  if(wkDrawableXHMap==null || wkDrawableXHMap.get()==null){
+			  wkDrawableXHMap=new SoftReference<HashMap<String,String>>(readDrawableList(context,vga));
+			  return wkDrawableXHMap;
+		  }else{
+			  return wkDrawableXHMap;
+		  }
+	  }else if(vga.equalsIgnoreCase("drawable-xxhdpi")){
+		  if(wkDrawableXXHMap==null || wkDrawableXXHMap.get()==null){
+			  wkDrawableXHMap=new SoftReference<HashMap<String,String>>(readDrawableList(context,vga));
+			  return wkDrawableXXHMap;
+		  }else{
+			  return wkDrawableXXHMap;
+		  }
+	  }else if(vga.equalsIgnoreCase("drawable")){
+		  if(wkDrawableMap==null || wkDrawableMap.get()==null){
+			  wkDrawableMap=new SoftReference<HashMap<String,String>>(readDrawableList(context,vga));
+			  return wkDrawableMap;
+		  }else{
+			  return wkDrawableMap;
+		  }
+	  }else if(vga.equalsIgnoreCase("drawable-xxxhdpi")){
+		  if(wkDrawableXXXHMap==null || wkDrawableXXXHMap.get()==null){
+			  wkDrawableXXXHMap=new SoftReference<HashMap<String,String>>(readDrawableList(context,vga));
+			  return wkDrawableXXXHMap;
+		  }else{
+			  return wkDrawableXXXHMap;
+		  }
+	  }
+	  return null;
+  }
+   
+  private HashMap<String,String> readDrawableList(Context context,String vga){
+    return ResourceUtil.saveDrawableInMap(context, vga);
+  }
+  
+  private String getDrawableName(String name,SoftReference<HashMap<String,String>> SoftMap){
+	  try{
+        HashMap<String, String> map=SoftMap.get();
+        return map.get(name);
+	  }catch(Exception e){
+		  e.printStackTrace();
+		  return null;
+	  }
+  }
+  
+  public String findDrawablePath(Context context,String name){
+	 int desity=DensityUtil.getDensity(context);
+	 String drawableName=null;
+	 if((drawableName==null)&&desity>480){
+		 drawableName=getDrawableName(name,wkDrawableXXXHMap);
+		 vga="drawable-xxxhdpi";
+	 }
+	 if((drawableName==null)&&desity>320){
+		 drawableName=getDrawableName(name,wkDrawableXXHMap);
+		 vga="drawable-xxhdpi";
+	 }
+	 if((drawableName==null)&&desity>240){
+		 drawableName=getDrawableName(name,wkDrawableXHMap);
+		 vga="drawable-xhdpi";
+	 }
+	 if((drawableName==null)&&desity>160){
+		 drawableName=getDrawableName(name,wkDrawableHMap);
+		 vga="drawable-hdpi";
+	 }
+	 if((drawableName==null)&&desity>120){
+		 drawableName=getDrawableName(name,wkDrawableMMap);
+		 vga="drawable-mdpi";
+	 }
+	 if((drawableName==null)&&desity>0){
+		 drawableName=getDrawableName(name,wkDrawableLMap);
+		 vga="drawable-ldpi";
+	 }
+	 if((drawableName==null)){
+		 drawableName=getDrawableName(name,wkDrawableMap);
+		 vga="drawable";
+	 }
+	 return drawableName;
+  }
+	
+   /**
 	 * 获取统一字符串，放入键值对当中
 	 * @return 所有的字符串名称
 	 */
@@ -354,34 +574,21 @@ public class YDResource {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		XmlPullParser parser=Xml.newPullParser();
-		try {
-			parser.setInput(is, "utf-8");
-			HashMap<String,String> map=new HashMap<String, String>();
-			for(int event=parser.getEventType();event!=XmlPullParser.END_DOCUMENT;event=parser.next()){
-				if(event==XmlPullParser.START_TAG){
-						if("string".equals(parser.getName())){
-							String name=parser.getAttributeValue(0);
-							String value=parser.nextText();
-							map.put(name, value);
-						}
-				}
-			}
-			return map;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+		return readXml(is, "string");
 	}
-	
-	
-	public void initValues(){
-		if(wkstrings==null || wkstrings.get()==null){
-			wkstrings=new SoftReference<HashMap<String,String>>(readStringsXml());
+   
+	private HashMap<String,String> readDimensXml(){
+		InputStream is=null;
+		try {
+			 if(assetsFlag){
+			   is=mContext.getAssets().open("res/values/dimens.xml");
+			 }else{
+			   is=new FileInputStream(rootpath+"/values/dimens.xml");
+			 }
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
-		if(wkColorMap==null || wkColorMap.get()==null){
-			wkColorMap=new SoftReference<HashMap<String,String>>(readColorsXml());
-		}
+		return readXml(is,"dimen");
 	}
 	
 	private  HashMap<String,String> readColorsXml(){
@@ -394,25 +601,8 @@ public class YDResource {
 			 }
 		} catch (IOException e1) {
 			e1.printStackTrace();
-		}
-		XmlPullParser parser=Xml.newPullParser();
-		try {
-			parser.setInput(is, "utf-8");
-			HashMap<String,String> map=new HashMap<String, String>();
-			for(int event=parser.getEventType();event!=XmlPullParser.END_DOCUMENT;event=parser.next()){
-				if(event==XmlPullParser.START_TAG){
-						if("color".equals(parser.getName())){
-							String name=parser.getAttributeValue(0);
-							String value=parser.nextText();
-							map.put(name, value);
-						}
-				}
-			}
-			return map;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+		}		
+		return readXml(is,"color");
 	}
 	/**
 	 * 展示图片
@@ -427,32 +617,6 @@ public class YDResource {
 		sb.append(rootpath).append(vga).append(imagename).append(".png");
         Bitmap bm=BitmapFactory.decodeFile(sb.toString());
         imageView.setImageBitmap(bm);
-	}
-	/**
-	 * 获取到图像资源
-	 * @param context
-	 * @param imagename
-	 * @return
-	 */
-	public Drawable getDrawable(Context context,String imagename){
-		Drawable drawable=null;
-		if(imagename.startsWith("@drawable/")){
-			imagename=imagename.substring(10);
-			InputStream is=null;
-			StringBuilder sb=new StringBuilder();
-			sb.append(rootpath).append(vga).append(imagename).append(".png");
-		    try {
-				if(assetsFlag){
-				   is=mContext.getAssets().open(sb.toString());
-				}else{
-				   is=new FileInputStream(sb.toString());
-			    }
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-	        drawable=new BitmapDrawable(context.getResources(),scaleBitmap(context,BitmapFactory.decodeStream(is)));
-		}
-		return drawable;
 	}
 	
 	public String getID(String s){
@@ -470,20 +634,7 @@ public class YDResource {
 		return s.hashCode();
 	}
 	
-	/**
-	 * 缩放bitmap图
-	 * @param context
-	 * @param bitmap 图片
-	 * @return 放大后的图片
-	 */
-	public Bitmap scaleBitmap(Context context,Bitmap bitmap){
-		float imageDensity=240.0f;
-		float num=DensityUtil.getDensity(context)/imageDensity;
-		Matrix matrix = new Matrix();
-    	matrix.postScale(num,num); //长和宽放大缩小的比例
-    	Bitmap resizeBmp = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
-		return resizeBmp;
-	}
+	
 	/**
 	 * 获取布局View树
 	 * @param str 要解析的xml文件名
@@ -492,7 +643,7 @@ public class YDResource {
 	 */
 	public View getLayout(String str) {
 		//第一次均为空
-		initValues();
+		initValues(mContext);
 		YDLayoutInflate inflate=new YDLayoutInflate(mContext);
 		StringBuilder sb=new StringBuilder();
 		//File.separator即是/符号
@@ -501,6 +652,8 @@ public class YDResource {
 		if(Logger.debug){
 		   Logger.i(sb.toString());
 		}
-		return inflate.inflate(sb.toString(), null);
+		View view=inflate.inflate(sb.toString(), null);
+		int i=0;
+		return view;
 	}
 }

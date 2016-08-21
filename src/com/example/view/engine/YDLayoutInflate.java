@@ -27,13 +27,6 @@ import java.util.HashMap;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import com.example.view.AbsoluteLayoutParams;
-import com.example.view.FrameLayoutParams;
-import com.example.view.LinearLayoutParams;
-import com.example.view.Params;
-import com.example.view.RelativeLayoutParams;
-import com.example.view.TableLayoutParams;
-
 import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.util.AttributeSet;
@@ -42,6 +35,13 @@ import android.util.Xml;
 import android.view.InflateException;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.view.params.AbsoluteLayoutParams;
+import com.example.view.params.FrameLayoutParams;
+import com.example.view.params.LinearLayoutParams;
+import com.example.view.params.Params;
+import com.example.view.params.RelativeLayoutParams;
+import com.example.view.params.TableLayoutParams;
 
 /**
  * This class is used to instantiate layout XML file into its corresponding View
@@ -674,7 +674,7 @@ public  class YDLayoutInflate{
                 final View view = createViewFromTag(name, attrs);
                 final ViewGroup viewGroup = (ViewGroup) parent;
               String name1=viewGroup.getClass().getName();
-              final Params createparams=createParams(viewGroup.getContext(), name1);
+              final Params createparams=ResourceUtil.createParams(viewGroup.getContext(), name1);
              // final LinearLayoutParams createparams=new LinearLayoutParams(parent.getContext());
               final ViewGroup.LayoutParams params = createparams.generateLayoutParams(attrs);
               
@@ -686,31 +686,7 @@ public  class YDLayoutInflate{
         }
 //        parent.onFinishInflate();
     }
-    /**
-     * 创建配置信息
-     * @param context
-     * @param name
-     * @return
-     */
-    private Params createParams(Context context,String name){
-    	Params params=null;
-    	if(name.equals("com.example.view.YDLinearLayout")){
-    		params=new LinearLayoutParams(context);
-    	}
-    	else if(name.equals("com.example.view.YDRelativeLayout")){
-    		params=new RelativeLayoutParams(context);
-    	}
-    	else if(name.equals("com.example.view.YDFrameLayout")){
-    		params=new FrameLayoutParams(context);
-    	}
-       else if(name.equals("com.example.view.YDTableLayout")){
-    	   params=new TableLayoutParams(context);
-    	}
-       else if(name.equals("com.example.view.YDAbsoluteLayout")){
-    	   params=new AbsoluteLayoutParams(context);
-    	}
-    	return params;
-    }
+   
    
     
     private void parseRequestFocus(XmlPullParser parser, View parent)

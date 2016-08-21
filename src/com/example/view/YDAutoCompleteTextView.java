@@ -1,21 +1,19 @@
 package com.example.view;
 
 import java.util.HashMap;
-
-import com.example.inflatexml.R;
 import com.example.view.engine.ParamValue;
+import com.example.view.engine.ResourceUtil;
 import com.example.view.engine.YDResource;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-/**
- * 
- */
+
 public class YDAutoCompleteTextView extends android.widget.AutoCompleteTextView {
 
 	private static final String TAG = "AutoCompleteTextView";
@@ -23,10 +21,10 @@ public class YDAutoCompleteTextView extends android.widget.AutoCompleteTextView 
 		super(context);
 		setAttributeSet(attrs);
 	}
-public void setAttributeSet(AttributeSet attrs){
-		
-		HashMap<String,ParamValue> map=YDResource.getInstance().getViewMap();
-		
+	
+  @SuppressLint("NewApi")
+public void setAttributeSet(AttributeSet attrs){	
+		HashMap<String,ParamValue> map=YDResource.getInstance().getViewMap();		
 		int count =attrs.getAttributeCount();
 		for(int i=0;i<count ;i++){
 			ParamValue key=map.get(attrs.getAttributeName(i));
@@ -35,35 +33,36 @@ public void setAttributeSet(AttributeSet attrs){
 			}
 			switch (key) {
 			case text:
-				this.setText(attrs.getAttributeValue(i));
-				break;
-			case ellipsize:
-				if(attrs.getAttributeBooleanValue(i,false)){
-					
-					this.setFocusable(true);
-					this.setFocusableInTouchMode(true);
-					this.setSingleLine(true);
-					this.setEllipsize(TruncateAt.MARQUEE);
-					this.setMarqueeRepeatLimit(1000);
-					this.setSingleLine();
-					this.setHorizontallyScrolling(true);
-					this.requestFocus();
-				}
-				break;
-			case fadingEdge:
-					this.setHorizontalFadingEdgeEnabled(attrs.getAttributeBooleanValue(i, false));
-				break;
-			case scrollHorizontally:
-					this.setHorizontallyScrolling(attrs.getAttributeBooleanValue(i, false));
+				String value=YDResource.getInstance().getString(attrs.getAttributeValue(i));
+				this.setText(value);
+				Log.i(TAG, value);
 				break;
 			case textColor:
+				this.setTextColor(YDResource.getInstance().getIntColor(attrs.getAttributeValue(i)));
+				break;
+			case textColorHint:
 				this.setTextColor(YDResource.getInstance().getIntColor(attrs.getAttributeValue(i)));
 				break;
 			case textSize:
 				String val1=attrs.getAttributeValue(i);
 				if(!TextUtils.isEmpty(val1)){
-					this.setTextSize(YDResource.getInstance().calculateRealSize(val1));
+					this.setTextSize(YDResource.getInstance().calculateTextSize(val1));
 				}
+				break;
+			case textStyle:
+				String textStyle=attrs.getAttributeValue(i);
+				if("bold".equalsIgnoreCase(textStyle)){
+				   this.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+				}else if("normal".equalsIgnoreCase(textStyle)){
+				   this.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+				}else if("italic".equalsIgnoreCase(textStyle)){
+				   this.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
+				}
+				break;
+			case hint:
+				String hint=YDResource.getInstance().getString(attrs.getAttributeValue(i));
+				this.setHint(hint);
+				Log.i(TAG, hint);
 				break;
 			case visibility:
 				String val2=attrs.getAttributeValue(i);
@@ -75,19 +74,141 @@ public void setAttributeSet(AttributeSet attrs){
 					}
 				}
 				break;
+			case height:
+				this.setHeight(YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i)));
+				break;
+			case width:
+				this.setWidth(YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i)));
+				break;
+			case maxHeight:
+				this.setMaxHeight(YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i)));
+				break;
+			case maxWidth:
+				this.setMaxWidth(YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i)));
+				break;
+			case minHeight:
+				this.setMinimumHeight(YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i)));
+				break;
+			case minWidth:
+				this.setMinimumWidth(YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i)));
+				break;
+			case padding:
+				int paddings=YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i));
+				this.setPadding(paddings,paddings,paddings,paddings);
+				break;
+			case paddingTop:
+				this.setPadding(
+						this.getPaddingLeft(),
+						YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i)),
+						this.getPaddingRight(),
+						this.getPaddingBottom());
+				break;
+			case paddingBottom:
+				this.setPadding(
+						this.getPaddingLeft(),
+						this.getPaddingTop(),
+						this.getPaddingRight(),
+						YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i)));
+				break;
+			case paddingLeft:
+				this.setPadding(
+						YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i)),
+						this.getPaddingTop(),
+						this.getPaddingRight(),
+						this.getPaddingBottom());
+				break;
+			case paddingRight:
+				this.setPadding(
+						this.getPaddingLeft(),
+						this.getPaddingTop(),
+						YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i)),
+						this.getPaddingBottom());
+				break;
+			case paddingEnd:
+				break;
+			case paddingStart:
+				break;
+			case ellipsize:
+				String eString=attrs.getAttributeValue(i);
+				if(eString.equalsIgnoreCase("start")){
+					this.setEllipsize(TruncateAt.START);
+				}else if(eString.equalsIgnoreCase("end")){
+					this.setEllipsize(TruncateAt.END);
+				}else if(eString.equalsIgnoreCase("middle")){
+					this.setEllipsize(TruncateAt.MIDDLE);
+				}else if(eString.equalsIgnoreCase("marquee")){
+					this.setEllipsize(TruncateAt.MARQUEE);
+				}
+				break;
+			case scrollHorizontally:
+				this.setHorizontallyScrolling(attrs.getAttributeBooleanValue(i, false));
+				break;	
+			case fadingEdge:
+				this.setHorizontalFadingEdgeEnabled(attrs.getAttributeBooleanValue(i, false));
+				break;
+			case id:
+				String idString =YDResource.getInstance().getID(attrs.getAttributeValue(i));
+				//this.setId(YDResource.getInstance().getStringHashCode(idString));
+				if(YDResource.getInstance().getIDWithString(idString)==-1){
+					int m;
+					if(Build.VERSION.SDK_INT>=17){
+					   m =View.generateViewId();
+					}else{
+					   m=ResourceUtil.generateViewId();
+					}  
+					YDResource.getInstance().setIDWithString(idString, m);
+					this.setId(m);
+				}
+				YDResource.getInstance().setViewId(idString,this);
+				break;
+			case lines:
+				this.setLines(attrs.getAttributeIntValue(i, 1));
+				break;
+			case singleLine:
+				this.setSingleLine(attrs.getAttributeBooleanValue(i, false));
+				break;
+			case gravity:
+				this.setGravity(YDResource.getInstance().getGravity(attrs.getAttributeValue(i)));
+				break;
+			case completionHint:
+				this.setCompletionHint(attrs.getAttributeValue(i));
+				break;
+			case completionThreshold:
+				break;
+			case dropDownHeight:
+				this.setDropDownHeight(
+						YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i)));
+				break;
+			case dropDownWidth:
+				this.setDropDownWidth(
+						YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i)));
+				break;
+			case dropDownHorizontalOffset:
+				this.setDropDownHorizontalOffset(
+						YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i)));
+				break;
+			case dropDownVerticalOffset:
+				this.setDropDownVerticalOffset(
+						YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i)));
+				break;
+			case alpha:
+				this.setAlpha(attrs.getAttributeFloatValue(i,0.5f));
+				break;
 			case background:
-				this.setBackgroundResource(R.drawable.ic_launcher);
-				break;
-			case textStyle:
-				if("bold".equalsIgnoreCase(attrs.getAttributeValue(i)))
-				this.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-				break;
+				String bString=attrs.getAttributeValue(i);
+				//显示颜色背景
+				if(bString.startsWith("@color/")||bString.startsWith("#")){
+				    this.setBackgroundColor(YDResource.getInstance().getIntColor(bString));
+				}else if(bString.startsWith("@drawable/")){
+					//颜色drawable背景
+				}
+				break;			
 			case style:
 				String style=attrs.getAttributeValue(i);
-				style=style.substring(style.indexOf("/"));
-				break;
-			case src:
-				Log.i("setAttribute", "src ��ǩ��δ����");
+				style=style.substring(style.indexOf("/")+1);
+				Log.i("textview","设置属性值");
+				int id=YDResource.getInstance().getIdentifier("R.style."+style);
+				this.setTextAppearance(getContext(), id);
 				break;
 			default:
 				break;

@@ -44,7 +44,7 @@ public enum ParamValue {
 	layout_alignRight,
 	layout_alignBaseline,
 	
-	
+	alpha,
 	text,
 	hint,
 	backgroundColor,
@@ -52,11 +52,13 @@ public enum ParamValue {
 	fadingEdge,
 	scrollHorizontally,
 	textColor,
+	textColorHint,
 	textSize,
 	visibility,
 	background,
 	textStyle,
 	style,
+	theme,
 	src,
 	gravity,
 	padding,
@@ -66,8 +68,53 @@ public enum ParamValue {
 	paddingRight,
 	paddingEnd,
 	paddingStart,
+	lines,
+	singleLine,
+	height,
+	width,
+	password,
+	numeric,
+	digits,
+	maxLength,
+	editable,
+	phoneNumber,
+	focusable,
+	cursorVisible,
+	inputType,
+	capitalize,
+	
+	
+	completionHint,
+	completionThreshold,
+	dropDownHeight,
+	dropDownWidth,
+	dropDownHorizontalOffset,
+	dropDownVerticalOffset,
+	
+	scaleType,
+	maxHeight,
+	maxWidth,
+	minHeight,
+	minWidth,
+	
+	divider,
+	dividerHeight,
+	headerDividersEnabled,
+	footerDividersEnabled,
+	scrollbarSize,
+	scrollbars,
+	listSelector,
+	scrollbarStyle,
+	
+	textDirection,
+	progress,
+	progressDrawable,
+	secondaryProgress,
+	max,
 	
 	verticalSpacing,
 	numColumns
+	
+
 	;
 }

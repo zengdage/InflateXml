@@ -31,7 +31,6 @@ public class DensityUtil {
     	
     	DisplayMetrics metrics=new DisplayMetrics();
     	display.getMetrics(metrics);
-    	
     	return metrics;
     }
     

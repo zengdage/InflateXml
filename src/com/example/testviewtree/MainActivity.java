@@ -1,6 +1,7 @@
 package com.example.testviewtree;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.TextureView;
 import android.view.View;
@@ -25,7 +26,9 @@ public class MainActivity extends Activity {
 			  YDView ydView=new YDView(this,v);
 			  YDTextView text=(YDTextView)ydView.findViewByID("textFirst");
 			  text.setText("北京北京北京");
-			  
+			  YDTextView text1=(YDTextView)ydView.findViewByID("textSecond");
+			  text1.setText("fnjkjlkjejao");
+			  text1.setBackgroundColor(Color.RED);
 			//v.setBackgroundColor(Color.WHITE);   						  
 		} catch (Exception e) {
 			e.printStackTrace();

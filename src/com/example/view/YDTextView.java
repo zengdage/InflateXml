@@ -3,18 +3,20 @@ package com.example.view;
 import java.util.HashMap;
 
 import com.example.view.engine.ParamValue;
+import com.example.view.engine.ResourceUtil;
 import com.example.view.engine.YDResource;
-import com.example.view.utils.DensityUtil;
 
-import android.R.string;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+@SuppressLint("NewApi")
 public class YDTextView extends android.widget.TextView{
 	private boolean isMarquee=false;
 	private static final String TAG = "TextView";
@@ -50,6 +52,9 @@ public class YDTextView extends android.widget.TextView{
 			case textColor:
 				this.setTextColor(YDResource.getInstance().getIntColor(attrs.getAttributeValue(i)));
 				break;
+			case textColorHint:
+				this.setTextColor(YDResource.getInstance().getIntColor(attrs.getAttributeValue(i)));
+				break;
 			case textSize:
 				String val1=attrs.getAttributeValue(i);
 				if(!TextUtils.isEmpty(val1)){
@@ -80,6 +85,12 @@ public class YDTextView extends android.widget.TextView{
 						this.setVisibility(View.GONE);
 					}
 				}
+				break;
+			case height:
+				this.setHeight(YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i)));
+				break;
+			case width:
+				this.setWidth(YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i)));
 				break;
 			case padding:
 				int paddings=YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i));
@@ -117,22 +128,63 @@ public class YDTextView extends android.widget.TextView{
 				break;
 			case paddingStart:
 				break;
+			case maxHeight:
+				this.setMaxHeight(YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i)));
+				break;
+			case maxWidth:
+				this.setMaxWidth(YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i)));
+				break;
+			case minHeight:
+				this.setMinimumHeight(YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i)));
+				break;
+			case minWidth:
+				this.setMinimumWidth(YDResource.getInstance().calculateRealSize(attrs.getAttributeValue(i)));
+				break;
 			case ellipsize:
-				if(attrs.getAttributeBooleanValue(i,false)){
-					isMarquee=true;
-					this.setFocusable(true);
-					this.setFocusableInTouchMode(true);
-					this.setSingleLine(true);
+				String eString=attrs.getAttributeValue(i);
+				if(eString.equalsIgnoreCase("start")){
+					this.setEllipsize(TruncateAt.START);
+				}else if(eString.equalsIgnoreCase("end")){
+					this.setEllipsize(TruncateAt.END);
+				}else if(eString.equalsIgnoreCase("middle")){
+					this.setEllipsize(TruncateAt.MIDDLE);
+				}else if(eString.equalsIgnoreCase("marquee")){
 					this.setEllipsize(TruncateAt.MARQUEE);
-					this.setMarqueeRepeatLimit(1000);
-					this.setSingleLine();
-					this.setHorizontallyScrolling(true);
-					this.requestFocus();
 				}
 				break;
 			case scrollHorizontally:
 				this.setHorizontallyScrolling(attrs.getAttributeBooleanValue(i, false));
-				break;		
+				break;	
+			case fadingEdge:
+				this.setHorizontalFadingEdgeEnabled(attrs.getAttributeBooleanValue(i, false));
+				break;
+			case id:
+				String idString =YDResource.getInstance().getID(attrs.getAttributeValue(i));
+				//this.setId(YDResource.getInstance().getStringHashCode(idString));
+				if(YDResource.getInstance().getIDWithString(idString)==-1){
+					int m;
+					if(Build.VERSION.SDK_INT>=17){
+					   m =View.generateViewId();
+					}else{
+					   m=ResourceUtil.generateViewId();
+					}  
+					YDResource.getInstance().setIDWithString(idString, m);
+					this.setId(m);
+				}
+				YDResource.getInstance().setViewId(idString,this);
+				break;
+			case alpha:
+				this.setAlpha(attrs.getAttributeFloatValue(i,0.5f));
+				break;
+			case lines:
+				this.setLines(attrs.getAttributeIntValue(i, 1));
+				break;
+			case singleLine:
+				this.setSingleLine(attrs.getAttributeBooleanValue(i, false));
+				break;
+			case gravity:
+				this.setGravity(YDResource.getInstance().getGravity(attrs.getAttributeValue(i)));
+				break;
 			case background:
 				String bString=attrs.getAttributeValue(i);
 				//显示颜色背景
@@ -141,10 +193,7 @@ public class YDTextView extends android.widget.TextView{
 				}else if(bString.startsWith("@drawable/")){
 					//颜色drawable背景
 				}
-				break;
-			case fadingEdge:
-				this.setHorizontalFadingEdgeEnabled(attrs.getAttributeBooleanValue(i, false));
-				break;
+				break;			
 			case style:
 				String style=attrs.getAttributeValue(i);
 				style=style.substring(style.indexOf("/")+1);
@@ -152,18 +201,11 @@ public class YDTextView extends android.widget.TextView{
 				int id=YDResource.getInstance().getIdentifier("R.style."+style);
 				this.setTextAppearance(getContext(), id);
 				break;
-			case src:				
-				break;
-			case id:
-				String idString =YDResource.getInstance().getID(attrs.getAttributeValue(i));
-				this.setId(YDResource.getInstance().getStringHashCode(idString));
-				YDResource.getInstance().setViewId(idString,this);
+			case theme:
 				break;
 			default:
 				break;
 			}
     	}
     }
-	
-	
   }
