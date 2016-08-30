@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.example.view.engine.ParamValue;
 import com.example.view.engine.ResourceUtil;
 import com.example.view.engine.YDResource;
+import com.example.view.utils.DrawableUtils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -18,8 +19,10 @@ import android.view.View;
 public class YDFrameLayout extends android.widget.FrameLayout {
 
 	private static final String TAG = "FrameLayout";
+	private Context context;
 	public YDFrameLayout(Context context, AttributeSet attrs) {
 		super(context);
+		this.context=context;
 		setLayoutParams(generateLayoutParams(attrs));
 	}
 	@SuppressLint("NewApi")
@@ -150,6 +153,7 @@ public class YDFrameLayout extends android.widget.FrameLayout {
 				    this.setBackgroundColor(YDResource.getInstance().getIntColor(bString));
 				}else if(bString.startsWith("@drawable/")){
 					//颜色drawable背景
+					this.setBackgroundDrawable(DrawableUtils.getDrawable(context, bString,"res"));
 				}
 				break;
 			case theme:

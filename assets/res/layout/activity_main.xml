@@ -7,12 +7,121 @@
     android:orientation="vertical"
     >
 
+    <fragment
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <ExpandableListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+        <DigitalClock
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+            />
+        <DialerFilter
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+            />
+    <ZoomButton
+         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <ZoomControls
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <ViewAnimator
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <TimePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <TextSwitcher
+         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <ViewSwitcher
+         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
     <View 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
-
+    <ImageButton
+         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <RadioButton
+         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <WebView
+          android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <AnalogClock
+       android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <CheckedTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <VideoView
+         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <Spinner
+         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"      
+        />
+    <Chronometer
+         android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        />
+    <Gallery
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        />
+    <RatingBar 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"        
+        />
+    <RadioGroup
+         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"   
+        />
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"  
+        />
+    <SurfaceView
+         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    
+    <ViewFlipper
+         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
     <EditText 
+        
         android:numeric="signed|decimal"
         android:phoneNumber="true"
          android:id="@+id/editTetxtFirst"

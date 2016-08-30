@@ -112,6 +112,21 @@ public enum ParamValue {
 	secondaryProgress,
 	max,
 	
+	checked,
+	
+	hand_minute,
+	hand_hour,
+	keepScreenOn,
+	
+	popupBackground,
+	dropDownSelector,
+	
+	format,
+	
+	numStars,
+	inAnimation,
+	outAnimation,
+	
 	verticalSpacing,
 	numColumns
 	

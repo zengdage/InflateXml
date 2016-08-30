@@ -1,9 +1,12 @@
 package com.example.view;
 
 import java.util.HashMap;
+
 import com.example.view.engine.ParamValue;
 import com.example.view.engine.ResourceUtil;
 import com.example.view.engine.YDResource;
+import com.example.view.utils.DrawableUtils;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
@@ -16,15 +19,10 @@ import android.widget.RelativeLayout;
 public class YDRelativeLayout extends android.widget.RelativeLayout{
 	
 	private static final String TAG = "YDRelativeLayout";
-	public YDRelativeLayout(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-	}
-
+	private Context context;
 	public YDRelativeLayout(Context context, AttributeSet attrs) {
 		super(context);
-		/*for(int i=0;i<attrs.getAttributeCount();i++){
-			Log.i("relative", attrs.getAttributeName(i)+"="+attrs.getAttributeValue(i));
-		}*/
+		this.context=context;
 		setLayoutParams(generateLayoutParams(attrs));
 		Log.i(TAG, ""+isShown());
 	}
@@ -174,6 +172,7 @@ public class YDRelativeLayout extends android.widget.RelativeLayout{
 				    this.setBackgroundColor(YDResource.getInstance().getIntColor(bString));
 				}else if(bString.startsWith("@drawable/")){
 					//颜色drawable背景
+					this.setBackgroundDrawable(DrawableUtils.getDrawable(context, bString,"res"));
 				}
 				break;
 			case theme:
@@ -181,39 +180,6 @@ public class YDRelativeLayout extends android.widget.RelativeLayout{
 			default:
 				break;
 			}
-	    /*	Log.i("RelativeLayout : ", attrs.getAttributeName(i)+"="+attrs.getAttributeValue(i));
-	    	
-	    	if(name.equals("layout_width")){
-	    		String value=attrs.getAttributeValue(i);
-	    		if(value.equalsIgnoreCase("fill_parent")){
-	    			params.width=Params.FILL_PARENT;
-	    			
-	    		}else if(value.equalsIgnoreCase("wrap_content")){
-	    			params.width=Params.WRAP_CONTENT;
-	    		}else{
-	    			params.height=attrs.getAttributeIntValue(i, -2);
-	    		}
-	    	}else if(name.equals("layout_height")){
-	    		String value=attrs.getAttributeValue(i);
-	    		if(value.equalsIgnoreCase("fill_parent")){
-	    			params.height=Params.FILL_PARENT;
-	    		}else if(value.equalsIgnoreCase("wrap_content")){
-	    			params.height=Params.WRAP_CONTENT;
-	    		}else{
-	    			params.height=attrs.getAttributeIntValue(i, -2);
-	    		}
-	    		
-	    	}else if(name.equalsIgnoreCase("layout_centerHorizontal")){
-	    		if(attrs.getAttributeBooleanValue(i, false)){
-	    			params.addRule(this.CENTER_HORIZONTAL,this.TRUE);
-	    		}
-	    	}else if(name.equalsIgnoreCase("layout_centerVertical")){
-	    		if(attrs.getAttributeBooleanValue(i, false)){
-	    			params.addRule(this.CENTER_VERTICAL, this.TRUE);
-	    		}
-	    	}
-	    	
-    	}*/
 		
 		}
 		return params;

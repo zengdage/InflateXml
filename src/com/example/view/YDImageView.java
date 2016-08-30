@@ -5,9 +5,11 @@ import java.util.HashMap;
 import com.example.view.engine.ParamValue;
 import com.example.view.engine.ResourceUtil;
 import com.example.view.engine.YDResource;
+import com.example.view.utils.DrawableUtils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -16,8 +18,10 @@ import android.view.View;
 
 public class YDImageView extends android.widget.ImageView {
 
+	private Context context;
 	public YDImageView(Context context, AttributeSet attrs) {
 		super(context);
+		this.context=context;
 		setAttributeSet(attrs);
 	}
 
@@ -124,16 +128,25 @@ public class YDImageView extends android.widget.ImageView {
 				    this.setBackgroundColor(YDResource.getInstance().getIntColor(bString));
 				}else if(bString.startsWith("@drawable/")){
 					//颜色drawable背景
+					this.setBackgroundDrawable(DrawableUtils.getDrawable(context, bString,"res"));
 				}
 				break;			
+			case src:
+				String srcString=attrs.getAttributeValue(i);
+				//显示颜色背景
+				if(srcString.startsWith("@color/")||srcString.startsWith("#")){
+					this.setImageDrawable(new ColorDrawable(YDResource.getInstance().getIntColor(srcString)));
+				}else if(srcString.startsWith("@drawable/")){
+					//颜色drawable背景
+					this.setImageDrawable(DrawableUtils.getDrawable(context, srcString,"res"));
+				}
+				break;
 			case theme:
 				String style=attrs.getAttributeValue(i);
 				style=style.substring(style.indexOf("/")+1);
 				Log.i("textview","设置属性值");
 				int id=YDResource.getInstance().getIdentifier("R.style."+style);
 			//	this.setTextAppearance(getContext(), id);
-				break;
-			case src:
 				break;
 			default:
 				break;

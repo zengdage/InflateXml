@@ -16,6 +16,7 @@ import android.widget.TableLayout;
 import com.example.view.engine.ParamValue;
 import com.example.view.engine.ResourceUtil;
 import com.example.view.engine.YDResource;
+import com.example.view.utils.DrawableUtils;
 
 public class YDTableLayout extends android.widget.TableLayout implements Cloneable{
 
@@ -181,6 +182,7 @@ public class YDTableLayout extends android.widget.TableLayout implements Cloneab
 				    this.setBackgroundColor(YDResource.getInstance().getIntColor(bString));
 				}else if(bString.startsWith("@drawable/")){
 					//颜色drawable背景
+					this.setBackgroundDrawable(DrawableUtils.getDrawable(context, bString,"res"));
 				}
 				break;
 			case theme:

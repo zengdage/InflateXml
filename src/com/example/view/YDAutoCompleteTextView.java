@@ -1,9 +1,12 @@
 package com.example.view;
 
 import java.util.HashMap;
+
 import com.example.view.engine.ParamValue;
 import com.example.view.engine.ResourceUtil;
 import com.example.view.engine.YDResource;
+import com.example.view.utils.DrawableUtils;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
@@ -17,8 +20,10 @@ import android.view.View;
 public class YDAutoCompleteTextView extends android.widget.AutoCompleteTextView {
 
 	private static final String TAG = "AutoCompleteTextView";
+	private Context context;
 	public YDAutoCompleteTextView(Context context, AttributeSet attrs) {
 		super(context);
+		this.context=context;
 		setAttributeSet(attrs);
 	}
 	
@@ -201,6 +206,7 @@ public void setAttributeSet(AttributeSet attrs){
 				    this.setBackgroundColor(YDResource.getInstance().getIntColor(bString));
 				}else if(bString.startsWith("@drawable/")){
 					//颜色drawable背景
+					this.setBackgroundDrawable(DrawableUtils.getDrawable(context, bString,"res"));
 				}
 				break;			
 			case style:

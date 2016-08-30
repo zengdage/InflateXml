@@ -8,15 +8,12 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsoluteLayout;
-import android.widget.AbsoluteLayout.LayoutParams;
-
 import com.example.view.engine.ParamValue;
 import com.example.view.engine.ResourceUtil;
 import com.example.view.engine.YDResource;
+import com.example.view.utils.DrawableUtils;
 
 @SuppressLint("NewApi")
 public class YDAbsoluteLayout extends android.widget.AbsoluteLayout implements Cloneable{
@@ -160,6 +157,7 @@ public class YDAbsoluteLayout extends android.widget.AbsoluteLayout implements C
 				    this.setBackgroundColor(YDResource.getInstance().getIntColor(bString));
 				}else if(bString.startsWith("@drawable/")){
 					//颜色drawable背景
+					this.setBackgroundDrawable(DrawableUtils.getDrawable(context, bString,"res"));
 				}
 				break;	
 			case theme:

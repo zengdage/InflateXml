@@ -1,9 +1,12 @@
 package com.example.view;
 
 import java.util.HashMap;
+
 import com.example.view.engine.ParamValue;
 import com.example.view.engine.ResourceUtil;
 import com.example.view.engine.YDResource;
+import com.example.view.utils.DrawableUtils;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
@@ -148,6 +151,7 @@ public class YDListView extends android.widget.ListView {
 				    this.setBackgroundColor(YDResource.getInstance().getIntColor(bString));
 				}else if(bString.startsWith("@drawable/")){
 					//颜色drawable背景
+					this.setBackgroundDrawable(DrawableUtils.getDrawable(context, bString,"res"));
 				}
 				break;			
 			case theme:
