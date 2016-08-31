@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
 
-import android.R.integer;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

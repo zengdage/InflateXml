@@ -5,6 +5,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class IDUtils {
 
 	private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
+	/**
+	 * 生成控件ID
+	 * @return
+	 */
 	 public static int generateViewId() {
 	        for (;;) {
 	            final int result = sNextGeneratedId.get();
@@ -15,10 +19,13 @@ public class IDUtils {
 	                return result;
 	            }
 	        }
-	}
-	 
-	 
-		public String getID(String s){
+	 }
+	    /**
+		 * 获取在xml文件中定义的id字符串
+		 * @param s android:id="xxxxxxxx"里面的xxxxxxxxx，如@+id/button1
+		 * @return  在xml文件中定义的id字符串
+		 */
+		public static String getID(String s){
 			if(s.startsWith("@+id/")){
 				s=s.substring(5);
 				return s;
