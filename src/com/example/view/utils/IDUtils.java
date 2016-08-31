@@ -9,7 +9,7 @@ public class IDUtils {
 	 * 生成控件ID
 	 * @return
 	 */
-	 public static int generateViewId() {
+	public static int generateViewId() {
 	        for (;;) {
 	            final int result = sNextGeneratedId.get();
 	            // aapt-generated IDs have the high byte nonzero; clamp to the range under that.

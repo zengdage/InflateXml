@@ -6,12 +6,30 @@ import java.io.InputStream;
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ClipDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.InsetDrawable;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.LevelListDrawable;
+import android.graphics.drawable.NinePatchDrawable;
+import android.graphics.drawable.RotateDrawable;
+import android.graphics.drawable.ScaleDrawable;
+import android.graphics.drawable.StateListDrawable;
+import android.graphics.drawable.TransitionDrawable;
+import android.util.AttributeSet;
+import android.util.Xml;
 
 import com.example.view.engine.YDResource;
 
@@ -112,12 +130,33 @@ public class DrawableUtils {
 		     }              
 		}
 
+		
+		public static Drawable getXmlDrawable(Context context,String xmlFileName){
+			XmlPullParser parser=XmlParseUtil.getXmlPullParser(xmlFileName, context);
+		    try {
+				return DrawableInflate.createFromXml(context,parser);
+			} catch (XmlPullParserException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		    return null;
+		}
+
+		/**
+		 * 从drawable系列目录下获取drawable
+		 * @param context
+		 * @param imagename 图像名。不包括后缀名
+		 * @param rootpath  根路径
+		 * @return 
+		 */
 		public static Drawable getDrawable(Context context,String imagename,String rootpath){
 			Drawable drawable=null;
+            //以@drawable/开头
 			if(imagename.startsWith("@drawable/")){
 				imagename=imagename.substring(10);
-				InputStream is=null;
 				StringBuilder sb=new StringBuilder();
+				//得到图像名（包括后缀名），文件路径
 				String name=DrawableUtils.findDrawablePath(context, imagename);
 				sb.append(rootpath).append("/"+
 				    YDResource.getInstance().vga+"/").append(name);
@@ -125,12 +164,20 @@ public class DrawableUtils {
 				if(last.equalsIgnoreCase("jpg")||
 						last.equalsIgnoreCase("jpeg")||
 						last.equalsIgnoreCase("png")){
+					//直接获取图片资源
 					drawable=getBitmapDrawable(context, sb.toString());
+				}else if(last.equalsIgnoreCase("xml")){
+					
 				}
 			}
 			return drawable;
 		}
-		
+		/**
+		 * 获取到图片资源
+		 * @param context
+		 * @param imagename 图片路径（包括后缀名）
+		 * @return
+		 */
 		public static Drawable getBitmapDrawable(Context context,String imagename){
 			Drawable drawable=null;
 			InputStream is=null;
