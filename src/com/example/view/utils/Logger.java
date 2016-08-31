@@ -1,7 +1,5 @@
 package com.example.view.utils;
-/**
- * @author Codefarmer@sina.com
- */
+
 public class Logger {
 	public static boolean debug = true;
 	

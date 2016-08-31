@@ -208,11 +208,47 @@ public class DrawableUtils {
 	  
 	 
 	   
-
+		 public static SoftReference<HashMap<String,String>> getDrawablMapByNum(int num){
+			 switch (num) {
+			case 0:		
+				return YDResource.getInstance().wkDrawableLMap;
+			case 1:
+            	return YDResource.getInstance().wkDrawableMMap;
+			case 2:		
+            	 return YDResource.getInstance().wkDrawableHMap;
+			case 3:
+            	return YDResource.getInstance().wkDrawableXHMap;
+			case 4:	
+            	return YDResource.getInstance().wkDrawableXXHMap;
+			case 5:
+            	 return YDResource.getInstance().wkDrawableXXXHMap;
+			default:
+				return YDResource.getInstance().wkDrawableMap;
+			}
+		  }
+		 
+		 public static String getDrawablPathByNum(int num){
+			 switch (num) {
+			case 0:		
+				return "drawable-ldpi";
+			case 1:
+            	return "drawable-mdpi";
+			case 2:		
+            	 return "drawable-hdpi";
+			case 3:
+            	return "drawable-xhdpi";
+			case 4:	
+            	return "drawable-xxhdpi";
+			case 5:
+            	 return "drawable-xxxhdpi";
+			default:
+				return "drawable";
+			}
+		  }
 	  
 	  public static String findDrawablePath(Context context,String name){
 		 int desity=DensityUtil.getDensity(context);
-		 int num=0;
+		 int num=2;	
 		 int [] desitys={0,120,160,240,320,480};
 		 for(int i=desitys.length-1;i>=0;i--){
 			 if(desity>desitys[i]){
@@ -220,7 +256,23 @@ public class DrawableUtils {
 			 }
 		 }
 		 String drawableName=null;
-		 if((drawableName==null)&&desity>480){
+		 for(int i=num;i<desitys.length;i++){
+			 if(drawableName!=null){
+				 return drawableName;
+			 }else{
+				 drawableName=DrawableUtils.getDrawableName(name,getDrawablMapByNum(i));
+				 YDResource.getInstance().vga=getDrawablPathByNum(num);
+			 }
+		 }
+		 for(int i=num-1;i>=0;i--){
+			 if(drawableName!=null){
+				 return drawableName;
+			 }else{
+				 drawableName=DrawableUtils.getDrawableName(name,getDrawablMapByNum(i));
+				 YDResource.getInstance().vga=getDrawablPathByNum(num);
+			 }
+		 }
+		/* if((drawableName==null)&&desity>480){
 			 drawableName=DrawableUtils.getDrawableName(name,YDResource.getInstance().wkDrawableXXXHMap);
 			 YDResource.getInstance().vga="drawable-xxxhdpi";
 		 }
@@ -247,7 +299,7 @@ public class DrawableUtils {
 		 if((drawableName==null)){
 			 drawableName=DrawableUtils.getDrawableName(name,YDResource.getInstance().wkDrawableMap);
 			 YDResource.getInstance().vga="drawable";
-		 }
+		 }*/
 		 return drawableName;
 	  }
 }
