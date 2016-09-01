@@ -1,8 +1,5 @@
 package com.example.view.engine;
 
-/**
- * @author Codefarmer@sina.com
- */
 public enum ParamValue {
 	id,
 	layout_width,
@@ -128,8 +125,50 @@ public enum ParamValue {
 	outAnimation,
 	
 	verticalSpacing,
-	numColumns
+	numColumns,
 	
+	
+	//获取对应的属性值 Android框架自带的属性 attr  
+	pressed, 
+	window_focused,
+	focused,  
+	selected,
+	enabled,
+	drawable,
+	color,
+	
+	maxLevel,
+	minLevel,
+	
+	top,
+	right,
+	bottom,
+	left,
+	
+	antialias,
+	dither,
+	filter,
+	tileMode,
+	
+	shape,
+	topLeftRadius,
+    topRightRadius,
+    bottomLeftRadius,
+    bottomRightRadius,
+
+    angle,
+    centerX,
+    centerY,
+    centerColor,
+    endColor,
+    gradientRadius,
+    tartColor,
+    type,
+    useLevel,
+
+    dashWidth,
+    dashGap,
+	radius
 
 	;
 }
