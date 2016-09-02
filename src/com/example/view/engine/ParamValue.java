@@ -168,7 +168,22 @@ public enum ParamValue {
 
     dashWidth,
     dashGap,
-	radius
+	radius,
+	
+	scaleGravity,
+	scaleHeight,
+	scaleWidth,
+	level,
+	clipOrientation,
+	
+	insetTop,
+	insetLeft,
+	insetBottom,
+	insetRight,
+
+     pivotX,
+     pivotY,
+     duration
 
 	;
 }

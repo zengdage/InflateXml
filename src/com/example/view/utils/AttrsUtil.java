@@ -30,6 +30,26 @@ public class AttrsUtil {
 	}
 	
 	/**
+	 * 设置重心
+	 * @param gravity
+	 * @return
+	 */
+	public  static int getScaleGravity(String gravity){
+		String [] s=gravity.toUpperCase().split("\\|");
+		int sum=Gravity.TOP;
+		try {
+			Class clazz = Class.forName("android.view.Gravity");
+			for (int i = 0; i < s.length; i++) {
+				Field f=clazz.getField(s[i]);
+				sum|=f.getInt(null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return sum;
+	}
+	
+	/**
 	 * 获取到资源ID
 	 * @param tid
 	 * @return

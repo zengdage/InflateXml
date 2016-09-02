@@ -40,7 +40,6 @@ public class YDGradientDrawable extends GradientDrawable{
 				this.setCornerRadius(attrs.getAttributeIntValue(i,0));
 				break;
 			case topLeftRadius:
-				//this.setCornerRadii(radii);
 			case topRightRadius:
 				break;
 			case bottomLeftRadius:
@@ -92,7 +91,7 @@ public class YDGradientDrawable extends GradientDrawable{
 					width=0;
 					height=0;
 				   }
-				}else{
+				}else if(itemName.equalsIgnoreCase("stroke")){
 					if(i==count-1){
 					     this.setStroke(width, strokeColor, dashWidth, dashGap);
 					  }
