@@ -27,7 +27,6 @@ public class YDColorDrawable extends ColorDrawable{
 	public void setAttributeSet(AttributeSet attrs){
 		HashMap<String,ParamValue> map=YDResource.getInstance().getViewMap();	
 		int count =attrs.getAttributeCount();
-		int j=0;
 		Drawable drawable=null;
 		for(int i=0;i<count ;i++){
 			ParamValue key=map.get(attrs.getAttributeName(i));
@@ -60,12 +59,11 @@ public class YDColorDrawable extends ColorDrawable{
 	        if (type != XmlPullParser.START_TAG) {
 	            continue;
 	        }
-	        if (depth > innerDepth || !parser.getName().equals("item")) {
+	        if (depth > innerDepth) {
 	            continue;
 	        }
 	        setAttributeSet(attrs);
 	    }
-	    //onStateChange(getState());
 	}
 
 }

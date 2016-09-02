@@ -10,8 +10,6 @@ import com.example.view.engine.ParamValue;
 import com.example.view.engine.YDResource;
 import com.example.view.utils.DrawableUtils;
 
-import android.R;
-import android.R.integer;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
@@ -34,10 +32,10 @@ public class YDStateListDrawable extends StateListDrawable{
 		int j=0;
 		Drawable drawable=null;
 		for(int i=0;i<count ;i++){
-       /*	final int stateResId = attrs.getAttributeNameResource(i);
-	        if (stateResId == 0) 
-	        	break;
-	         states[j++] = attrs.getAttributeBooleanValue(i, false)
+		       /*	final int stateResId = attrs.getAttributeNameResource(i);
+	                if (stateResId == 0) 
+	        	           break;
+	                 states[j++] = attrs.getAttributeBooleanValue(i, false)
 	                    ? stateResId
 	                    : -stateResId;*/
 			ParamValue key=map.get(attrs.getAttributeName(i));
@@ -81,7 +79,7 @@ public class YDStateListDrawable extends StateListDrawable{
 	   states = StateSet.trimStateSet(states, j);
 	   this.addState(states, drawable);
    }
-	
+	@Override
 	public void inflate(Resources r, XmlPullParser parser,
 	        AttributeSet attrs)
 	        throws XmlPullParserException, IOException {
@@ -99,7 +97,6 @@ public class YDStateListDrawable extends StateListDrawable{
 	        }
 	        setAttributeSet(attrs);
 	    }
-	    //onStateChange(getState());
 	}
 
 

@@ -6,21 +6,15 @@ import java.util.HashMap;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.R.integer;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.StateListDrawable;
 import android.util.AttributeSet;
-import android.util.StateSet;
-
 import com.example.view.engine.ParamValue;
 import com.example.view.engine.YDResource;
 import com.example.view.utils.DrawableUtils;
-
 
 public class YDAnimationDrawable extends AnimationDrawable{
 	private Context context;
@@ -32,9 +26,8 @@ public class YDAnimationDrawable extends AnimationDrawable{
 	public void setAttributeSet(AttributeSet attrs,int index){
 		HashMap<String,ParamValue> map=YDResource.getInstance().getViewMap();	
 		int count =attrs.getAttributeCount();
-		int[] states = new int[count];
-		int j=0;
 		Drawable drawable=null;
+		int duration=1000;
 		for(int i=0;i<count ;i++){
 			ParamValue key=map.get(attrs.getAttributeName(i));
 			if(key==null){
@@ -51,15 +44,13 @@ public class YDAnimationDrawable extends AnimationDrawable{
 				}
 				break;
 			case duration:
-				//this.setConstantState(state);
-				//this.setExitFadeDuration(ms);
-				//this.setEnterFadeDuration(ms);
+				duration=attrs.getAttributeIntValue(i,1000);
 				break;
 			default:
 				break;
 			}
        }
-
+		this.addFrame(drawable, duration);
    }
 	
 	public void inflate(Resources r, XmlPullParser parser,

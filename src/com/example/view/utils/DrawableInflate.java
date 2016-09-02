@@ -5,6 +5,13 @@ import java.io.IOException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.NinePatchDrawable;
+import android.util.AttributeSet;
+import android.util.Xml;
+
 import com.example.drawable.YDAnimationDrawable;
 import com.example.drawable.YDBitmapDrawable;
 import com.example.drawable.YDClipDrawable;
@@ -13,18 +20,11 @@ import com.example.drawable.YDGradientDrawable;
 import com.example.drawable.YDInsetDrawable;
 import com.example.drawable.YDLayerDrawable;
 import com.example.drawable.YDLevelListDrawable;
+import com.example.drawable.YDNinePatchDrawable;
 import com.example.drawable.YDRotateDrawable;
 import com.example.drawable.YDScaleDrawable;
 import com.example.drawable.YDStateListDrawable;
 import com.example.drawable.YDTransitionDrawable;
-
-import android.content.Context;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.NinePatchDrawable;
-import android.util.AttributeSet;
-import android.util.Xml;
 
 public class DrawableInflate {
 	public static Drawable createFromXml(Context context,XmlPullParser parser)
@@ -55,17 +55,21 @@ public class DrawableInflate {
 			    } else if (name.equals("level-list")) {
 			        drawable = new YDLevelListDrawable(context);
 			    } else if (name.equals("layer-list")) {
-			        drawable = new YDLayerDrawable(context);
+			        //drawable = new YDLayerDrawable(context);
+			    	drawable=YDLayerDrawable.inflate(context, parser, attrs);
 			    } else if (name.equals("transition")) {
-			        drawable = new YDTransitionDrawable(context);
+			        //drawable = new YDTransitionDrawable(context);
+			    	drawable=YDTransitionDrawable.inflate(context, parser, attrs);
 			    } else if (name.equals("color")) {
 			        drawable = new YDColorDrawable(context);
 			    } else if (name.equals("shape")) {
 			        drawable = new YDGradientDrawable(context);
 			    } else if (name.equals("scale")) {
-			        drawable = new YDScaleDrawable(context);
+			        //drawable = new YDScaleDrawable(context);
+			    	drawable=YDScaleDrawable.inflate(context, parser, attrs);
 			    } else if (name.equals("clip")) {
-			        drawable = new YDClipDrawable(context);
+			        //drawable = new YDClipDrawable(context);
+			    	drawable=YDClipDrawable.inflate(context, parser, attrs);
 			    } else if (name.equals("rotate")) {
 			        drawable = new YDRotateDrawable(context);
 			    } else if (name.equals("animated-rotate")) {
@@ -73,14 +77,16 @@ public class DrawableInflate {
 			    } else if (name.equals("animation-list")) {
 			        drawable = new YDAnimationDrawable(context);
 			    } else if (name.equals("inset")) {
-			        drawable = new YDInsetDrawable(context);
+			        //drawable = new YDInsetDrawable(context);
+			    	drawable=YDInsetDrawable.inflate(context, parser, attrs);
 			    } else if (name.equals("bitmap")) {
 			        drawable = new YDBitmapDrawable(context);
 			        if (context.getResources()  != null) {
 			           ((BitmapDrawable) drawable).setTargetDensity(context.getResources().getDisplayMetrics());
 			        }
 			    } else if (name.equals("nine-patch")) {
-			       // drawable = new NinePatchDrawable();
+			        //drawable = new NinePatchDrawable();
+			    	drawable=YDNinePatchDrawable.inflate(context, parser, attrs);
 			        if (context.getResources() != null) {
 			            ((NinePatchDrawable) drawable).setTargetDensity(context.getResources().getDisplayMetrics());
 			         }
@@ -93,8 +99,4 @@ public class DrawableInflate {
 			    return drawable;
 			}
 	
-	
-	
-	
-	      
 }

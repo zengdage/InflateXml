@@ -27,7 +27,6 @@ public class YDBitmapDrawable extends BitmapDrawable{
 		this.context=context;
 	}
 	
-	
 	public void setBitmap(Bitmap bitmap) {
 		ConstantState constantState=this.getConstantState();
 		try {
@@ -110,7 +109,7 @@ public class YDBitmapDrawable extends BitmapDrawable{
 	        if (type != XmlPullParser.START_TAG) {
 	            continue;
 	        }
-	        if (depth > innerDepth || !parser.getName().equals("item")) {
+	        if (depth > innerDepth) {
 	            continue;
 	        }
 	        setAttributeSet(attrs);

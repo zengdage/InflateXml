@@ -29,12 +29,6 @@ public class YDLevelListDrawable extends LevelListDrawable{
         int minLevel=0,maxLevel=0;
 		Drawable drawable=null;
 		for(int i=0;i<count ;i++){
-       /*	final int stateResId = attrs.getAttributeNameResource(i);
-	        if (stateResId == 0) 
-	        	break;
-	         states[j++] = attrs.getAttributeBooleanValue(i, false)
-	                    ? stateResId
-	                    : -stateResId;*/
 			ParamValue key=map.get(attrs.getAttributeName(i));
 			if(key==null){
 				continue;
@@ -49,7 +43,6 @@ public class YDLevelListDrawable extends LevelListDrawable{
 			case drawable:
 				String bString=attrs.getAttributeValue(i);
                 if(bString.startsWith("@drawable/")){
-					//颜色drawable背景
 					drawable=DrawableUtils.getDrawable(context, bString,"res");
 				}
 				break;
@@ -60,7 +53,7 @@ public class YDLevelListDrawable extends LevelListDrawable{
 	   this.addLevel(minLevel, maxLevel, drawable);
 	   
    }
-	
+	@Override
 	public void inflate(Resources r, XmlPullParser parser,
 	        AttributeSet attrs)
 	        throws XmlPullParserException, IOException {
@@ -78,8 +71,5 @@ public class YDLevelListDrawable extends LevelListDrawable{
 	        }
 	        setAttributeSet(attrs);
 	    }
-	    //onStateChange(getState());
 	}
-
-
 }

@@ -183,7 +183,10 @@ public enum ParamValue {
 
      pivotX,
      pivotY,
-     duration
+     duration,
+     visible,
+     fromDegrees,
+     toDegrees
 
 	;
 }
